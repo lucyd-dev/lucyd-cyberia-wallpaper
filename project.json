@@ -174,7 +174,9 @@
 	"ratingviolence" : "none",
 	"tags" : [ "Anime" ],
 	"title" : "Lucyd Cyberia",
-	"type" : "Web",
-	"version" : 0,
-	"visibility" : "public"
+	"type" : "web",
+	"version" : 1,
+	"visibility" : "public",
+	"workshopid" : "3670970760",
+	"workshopurl" : "steam://url/CommunityFilePage/3670970760"
 }
