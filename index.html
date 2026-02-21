@@ -1,0 +1,148 @@
+<!--
+ * Project: lucyd-cyberia-wallpaper
+ * Copyright (c) 2026 LucydDev
+ * * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+-->
+ 
+<html lang="de">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="styles/main.css" />
+	</head>
+	<body>
+		<div class="overlay">
+			<div id="bgImg"></div>
+			<canvas id="matrix"></canvas>
+			<canvas id="audioVisual"></canvas>
+			<div class="slope"></div>
+			
+			<div class="header">
+				<div class="clockWidget">
+					<canvas
+						class="dayNight camo-fx"
+						width="67"
+						height="70"
+						data-svg="M32.915 0C25.6771 5.47707 21 14.1602 21 23.9365C21 40.5051 34.4315 53.9365 51 53.9365C56.8346 53.9365 62.2787 52.2684 66.8857 49.3867C61.3843 61.5068 49.1771 69.9365 35 69.9365C15.67 69.9365 0 54.2665 0 34.9365C0 16.3066 14.5558 1.07868 32.915 0Z"
+					></canvas>
+					<div class="currentDate">
+						<div id="clock">12:00:00</div>
+						<div id="date">Mon, 01/01/25</div>
+					</div>
+				</div>
+				<canvas
+					id="title"
+					class="camo-fx"
+					data-text="LUCYD CYBERIA"
+				></canvas>
+			</div>
+			<div class="widgets">
+				<div class="terminalWidget glassFrame">
+					<div class="terminalContent">
+						<p class="terminalLine">
+							→ <span class="primary">~</span> fastfetch
+						</p>
+						<div class="terminalLine fetch">
+							<div class="fetchLogo primary">
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡜⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣤⠤⢀⠀⠀⠀⠀⠀⠀⠐⠒⠒⠒⠶⠮⣅⣿⠛⠶⠖⠂⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠋⢀⢰⢈⣹⠓⣾⢷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣨⠀⢠⠐⣪⣭⣅⢤⣿⠞⠳⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣟⣶⢃⡃⠟⠓⡁⣫⡄⡀⠐⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⡰⢫⣟⠿⠧⣿⣿⣥⠴⣴⣮⣏⡣⣄⣲⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣰⣽⡵⢡⠤⠀⠈⢿⣷⠆⢚⡋⡁⢤⣿⡿⠁⠀⠀⠀⠀⢀⡤⠊⠉⠉⠙⣦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⣠⣤⠖⠶⡟⡧⢿⠀⠀⠀⠀⠀⠛⠶⣾⣷⡶⠟⠛⠉⢣⠀⣀⣀⣀⡜⠁⠀⠀⣠⠏⠁⠀⠀⢹⡠⠤⣄⣄⠀⠀⠀⠀⠀⠀
+⠀⠀⡜⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠞⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⣇⡀⢅⠀⠀
+⠀⠀⠁⠩⠵⠴⠲⠔⠶⠶⠶⠦⠴⠶⠶⠶⠖⠦⠤⢴⠏⠀⡴⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡏⡧⡀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⡀⠀⠀⣀⣀⣀⢀⣀⠀⠀⠀⠀⠀⠀⣀⣀⠤⠞⠁⠀⡜⢸⡏⠀⢸
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠽⠕⠋⠘⠓⠒⠲⠤⠤⠤⡖⣛⠴⠶⡲⠮⠭⢶⣭⠦⠤⠎⠀
+⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢠⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀
+⠀⠀⠀⢀⣀⣔⡽⣧⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⠴⠢⠤⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠎⠁⠀⠀
+⠀⠀⠉⠉⠉⠻⡏⡗⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡔⣝⢏⠁⠀⠀⠀⢀⣉⣀⣀⡀⡄⠀⠀⢠⠴⠗⠗⠒⠒⠺⠋⠛
+⠀⠀⠀⠀⠀⠀⠈⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠤⢉⡩⠟⣓⡿⠁⠀⠀⡖⠁⠀⠀⠀⠀⠀⠉⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⡠⣒⢯⢕⣫⡯⠗⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡗⡆⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⡜⢛⣿⡇⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡄⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠁⠉⠛⠛⠉⠉⠉⠉⠁⠉⠁⠁⠁⠉⠉⠉⠒⠉⠁⠉⠀⠀⠀⠀⠀⠀⠀⠀
+							</div>
+							<div>
+								<p>
+									<span class="primary" id="sessionName"></span><br />
+									------------------
+								</p>
+								<div class="fetchInfo">
+									<p>
+										OS<br />
+										Version<br />
+										Shell<br />
+										Terminal<br />
+										Resolution<br />
+										CPU<br />
+										GPU<br />
+										CPU Usage<br />
+										Memory<br />
+										Disk [C:]<br />
+									</p>
+									<p>
+										<span id="os"></span><br />
+										<span id="version"></span><br />
+										<span id="shell"></span><br />
+										<span id="terminal"></span><br />
+										<span id="resolution"></span><br />
+										<span id="cpu"></span><br />
+										<span id="gpu"></span><br />
+										<span class="load">[######----]</span> 787 processes<br />
+										<span class="load">[#####-----]</span> 13.12 GiB / 29.80
+										GiB<br />
+										[#######---] 1420 GiB / 1862 GiB<br />
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<p class="terminalLine">
+							→ <span class="primary">~</span> aboutme
+						</p>
+						<p class="terminalLine aboutme">
+							<span class="primary" id="customText">
+							</span>
+						</p>
+						<p class="terminalLine">
+							→ <span class="primary">~</span>
+							<span id="blinkingCursor">|</span>
+						</p>
+					</div>
+				</div>
+				<div id="musicWidget" class="glassFrame">
+					<img id="songCover" src="" />
+					<div id="musicInfo">
+						<div id="songTitle"></div>
+						<div id="songArtist"></div>
+						<div id="musicPlayer">
+							<p id="songPlayState"></p>
+							<div id="songTimebar"></div>
+							<div id="playerTime">
+								<p id="songPosition"></p>
+								<p id="songDuration"></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript" src="js/properties.js"></script>
+		<script type="text/javascript" src="js/fpsHandler.js"></script>
+		<script type="text/javascript" src="js/widgets.js"></script>
+		<script type="text/javascript" src="js/mediaInfo.js"></script>
+		<script type="text/javascript" src="js/audioVisualizerEngine.js"></script>
+		<script type="text/javascript" src="js/matrixEngine.js"></script>
+		<script type="text/javascript" src="js/dayNightEngine.js"></script>
+		<script type="text/javascript" src="js/camoShader.js"></script>
+		<script type="text/javascript" src="js/camoMaskEngine.js"></script>
+	</body>
+</html>

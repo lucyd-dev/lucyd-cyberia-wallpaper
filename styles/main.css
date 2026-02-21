@@ -1,0 +1,392 @@
+/*
+ * Project: lucyd-cyberia-wallpaper
+ * Copyright (c) 2026 LucydDev
+ * * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ */
+
+
+@font-face {
+	font-family: 'Noto Sans';
+	src: url('../fonts/NotoSans.woff') format('woff');
+}
+@font-face {
+	font-family: 'VCR OSD Mono';
+	src: url('../fonts/VCR_OSD_MONO.woff') format('woff');
+}
+@font-face {
+	font-family: 'Inconsolata';
+	src: url('../fonts/Inconsolata.woff') format('woff');
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+	font-size: 22px;
+}
+
+body {
+	--primary: rgb(161, 37, 255);
+	--secondary: rgb(255, 0, 229);
+	--color: #fff;
+	--color2: #999;
+	--bg: #101010;
+
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	color: var(--color);
+	background-color: var(--bg);
+}
+
+.overlay {
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+
+	&.spacingTaskbar {
+		height: calc(100vh - 60px);
+	}
+}
+
+#bgImg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 50%;
+	height: 100%;
+	background: url('assets/default-background.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50% 50%;
+}
+
+#matrix {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+}
+
+#audioVisual {
+	position: absolute;
+	bottom: 0;
+	left: 20%;
+	transform-origin: left bottom;
+	transform: rotate(-75deg) translate(-2%);
+	mix-blend-mode: screen;
+}
+
+.slope {
+	position: absolute;
+	bottom: 0;
+	left: 20%;
+	width: 100%;
+	height: 140%;
+	background-color: var(--bg);
+	transform-origin: left bottom;
+	transform: rotate(15deg);
+}
+
+.header {
+	position: absolute;
+	top: 20px;
+	right: 50px;
+	width: 55%;
+	display: flex;
+	align-items: center;
+
+	.clockWidget {
+		display: flex;
+		align-items: center;
+		width: max-content;
+		margin: 10px;
+		text-align: center;
+
+		.dayNight {
+			width: 3.5rem;
+			margin-right: 20px;
+		}
+
+		.currentDate {
+			#clock {
+				font-family: 'VCR OSD Mono', serif;
+				font-size: 3rem;
+				color: var(--color);
+			}
+
+			#date {
+				font-family: 'VCR OSD Mono', serif;
+				font-size: 1.8rem;
+				color: #aaa;
+			}
+		}
+	}
+
+	#title {
+		font-size: 7rem;
+		font-weight: 900;
+		margin: 0 0 -1rem auto;
+		letter-spacing: 0.2rem;
+	}
+}
+
+.glassFrame {
+	position: relative;
+	overflow: hidden;
+	border-radius: 25px;
+
+	&:after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border-radius: 25px;
+		background-color: rgba(0, 0, 0, 0.2);
+		backdrop-filter: blur(0.5px);
+		box-shadow: 10px 8px 12px 0 rgba(0, 0, 0, 0.3),
+			inset 4px 6px 5px 0 rgba(255, 255, 255, 0.2),
+			inset -4px -6px 5px 0 rgba(255, 255, 255, 0.07);
+		pointer-events: none;
+	}
+}
+
+.widgets {
+	position: absolute;
+	top: 210px;
+	right: 50px;
+	width: 55%;
+	height: calc(100% - 210px);
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	padding-bottom: 20px;
+}
+
+.terminalWidget {
+	width: 100%;
+	height: 100%;
+	flex: 3;
+	.terminalContent {
+		padding: 30px 20px;
+		font-family: 'Inconsolata', Arial, Helvetica, sans-serif;
+		font-size: 1rem;
+		.terminalLine {
+			text-shadow: 0 0 8px var(--color);
+			margin-bottom: 20px;
+			.fetchLogo {
+				font-size: 0.55rem;
+				width: 45%;
+				max-width: 500px;
+				line-height: 1.1em;
+			}
+			.fetchInfo {
+				display: flex;
+				gap: 20px;
+			}
+			.primary {
+				color: var(--primary);
+				text-shadow: 0 0 8px var(--primary);
+			}
+			#blinkingCursor {
+				will-change: opacity;
+			}
+		}
+		.fetch {
+			display: flex;
+			margin-bottom: 50px;
+		}
+		.aboutme {
+			margin-left: 50px;
+		}
+	}
+}
+
+#musicWidget {
+	display: flex;
+	align-items: center;
+	height: 300px;
+	background-size: cover;
+	background-position: center center;
+	transition: height 0.5s ease-in-out;
+	will-change: height;
+
+	&.disabled {
+		height: 0;
+	}
+
+	#musicInfo {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-end;
+		flex-wrap: nowrap;
+		text-align: center;
+		backdrop-filter: blur(20px);
+
+		&.noTimebar {
+			justify-content: center;
+			#musicPlayer {
+				display: none;
+			}
+		}
+	}
+
+	#songCover {
+		height: 100%;
+		max-width: 600px;
+		background-color: var(--bg);
+	}
+
+	#musicInfo {
+		#songTitle {
+			display: -webkit-box;
+			padding: 10px 20px;
+			-webkit-line-clamp: 2;
+			line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+			font-family: 'VCR OSD Mono', serif;
+			font-size: 2.3rem;
+			color: var(--color);
+			text-shadow: 4px 3px #000;
+		}
+
+		#songArtist {
+			display: -webkit-box;
+			padding: 10px 20px;
+			-webkit-line-clamp: 2;
+			line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+			font-family: 'VCR OSD Mono', serif;
+			font-size: 1.8rem;
+			color: var(--primary);
+			text-shadow: 3px 2px var(--secondary);
+		}
+	}
+
+	#musicPlayer {
+		width: 100%;
+		padding: 5px 20px 15px 20px;
+		display: flex;
+		flex-direction: column;
+		text-shadow: 3px 2px #000;
+		margin-top: -20px;
+
+		#songPlayState {
+			align-self: flex-start;
+			font-family: 'Segoe UI Symbol';
+			font-size: 1.4rem;
+		}
+
+		#songTimebar {
+			--player-width: 0%;
+			position: relative;
+			height: 10px;
+			width: 100%;
+			margin: 10px 0;
+			border-radius: 5px;
+			background-color: var(--color);
+
+			&:after {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: var(--player-width);
+				height: 100%;
+				border-radius: 5px;
+				background-color: var(--secondary);
+			}
+		}
+
+		#playerTime {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			font-family: 'VCR OSD Mono', serif;
+			font-size: 1rem;
+		}
+	}
+}
+
+@media screen and (max-height: 1300px) {
+	html {
+		font-size: 16px;
+	}
+	.widgets {
+		top: 150px;
+		height: calc(100% - 150px);
+	}
+	#musicWidget {
+		height: 250px;
+		#songCover {
+			max-width: 500px;
+		}
+	}
+}
+@media screen and (max-height: 1000px) {
+	html {
+		font-size: 14px;
+	}
+	.widgets {
+		top: 120px;
+		height: calc(100% - 120px);
+	}
+	#musicWidget {
+		height: 200px;
+		#songCover {
+			max-width: 400px;
+		}
+	}
+}
+
+@media (min-aspect-ratio: 32 / 9) {
+	.slope, #audioVisual {
+		left: 35%;
+	}
+}@media (min-aspect-ratio: 21 / 9) and (max-aspect-ratio: 32 / 9) {
+	.slope, #audioVisual {
+		left: 32%;
+	}
+}
+@media (min-aspect-ratio: 16 / 9) and (max-aspect-ratio: 21 / 9) {
+	.slope, #audioVisual {
+		left: 29%;
+	}
+}
+@media (min-aspect-ratio: 3 / 2) and (max-aspect-ratio: 16 / 9) {
+	.slope, #audioVisual {
+		left: 26%;
+	}
+}
+@media (min-aspect-ratio: 4 / 3) and (max-aspect-ratio: 3 / 2) {
+	.slope, #audioVisual {
+		left: 24%;
+	}
+}
+@media (min-aspect-ratio: 1 / 1) and (max-aspect-ratio: 4 / 3) {
+	html {
+		font-size: 12px;
+	}
+	.widgets {
+		top: 120px;
+		height: calc(100% - 120px);
+	}
+	.slope, #audioVisual {
+		left: 16%;
+	}
+}
