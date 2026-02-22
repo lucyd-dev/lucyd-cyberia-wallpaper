@@ -28,7 +28,7 @@ const PROPS = {
 		shell: 'Powershell',
         terminal: 'Windows Terminal',
         resolution: `${window.outerWidth}x${window.outerHeight}`,
-		cpu: 'AMD Ryzen 9 9950X3D @ 5.70Ghz',
+		cpu: 'AMD Ryzen 9 9950X3D @ 5.70GHz',
         gpu: 'AMD Radeon RX 7900 XTX',
         customtext: '♥ tell something about u or write a poem ♥<br>Use &lt;br&gt; for a line break'
 	}
