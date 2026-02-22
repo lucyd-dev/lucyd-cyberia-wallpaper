@@ -99,7 +99,6 @@ function setMediaThumbnail(thumbnail) {
 }
 
 function setTimebarState(isVisible) {
-	console.log('setting timebar state to', isVisible ? 'visible' : 'hidden');
 	if (isVisible) {
 		document.getElementById('musicInfo').classList.remove('noTimebar');
 		return;

@@ -75,7 +75,7 @@ window.wallpaperPropertyListener = {
 		
         
         if (properties.host)
-            PROPS.host = properties.host.value;
+            PROPS.terminal.host = properties.host.value;
 		
         if (properties.systemname)
             PROPS.terminal.systemname = properties.systemname.value;
