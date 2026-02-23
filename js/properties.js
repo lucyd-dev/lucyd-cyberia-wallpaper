@@ -40,6 +40,16 @@ if (localStorage.getItem('PROPS')) {
     Object.assign(PROPS, savedProps);
 }
 
+window.addEventListener('load', () => {
+    applyProperties();
+});
+
+window.addEventListener('resize', () => {
+	PROPS.terminal.resolution = `${window.outerWidth}x${window.outerHeight}`;
+    
+    applyProperties();
+});
+
 window.wallpaperPropertyListener = {
     applyGeneralProperties: (properties) => {
         if (properties.fps)
@@ -72,8 +82,6 @@ window.wallpaperPropertyListener = {
 		if (properties.imageposy)
 			PROPS.general.imgPos.y = properties.imageposy.value;
 		
-		
-        
         if (properties.host)
             PROPS.terminal.host = properties.host.value;
 		
@@ -100,15 +108,16 @@ window.wallpaperPropertyListener = {
         
         if (properties.customtext)
             PROPS.terminal.customtext = properties.customtext.value;
-    
-        localStorage.setItem('PROPS', JSON.stringify(PROPS));
+        
+        PROPS.terminal.resolution = `${window.outerWidth}x${window.outerHeight}`;
+        
         
         applyProperties();
 	},
 };
 
-function applyProperties() {   
-    document.body.style = `--primary: ${numToRGBA(PROPS.general.primary)}; --secondary: ${numToRGBA(PROPS.general.secondary)};`;
+function applyProperties() {
+    localStorage.setItem('PROPS', JSON.stringify(PROPS));
     
     if (PROPS.general.taskbar) {
         document.getElementsByClassName('overlay')[0].classList.add("spacingTaskbar");
@@ -116,10 +125,9 @@ function applyProperties() {
         document.getElementsByClassName('overlay')[0].classList.remove("spacingTaskbar");
     }
     
+    document.body.style = `--primary: ${numToRGBA(PROPS.general.primary)}; --secondary: ${numToRGBA(PROPS.general.secondary)};`;
     document.getElementById('title').dataset.text = PROPS.general.title.toUpperCase();
-    
     document.getElementById('sessionName').innerText = `${PROPS.terminal.host}@${PROPS.terminal.systemname}`;
-    
     document.getElementById('os').innerText = PROPS.terminal.os;
     document.getElementById('version').innerText = PROPS.terminal.version;
     document.getElementById('shell').innerText = PROPS.terminal.shell;
@@ -128,15 +136,12 @@ function applyProperties() {
     document.getElementById('cpu').innerText = PROPS.terminal.cpu;
     document.getElementById('gpu').innerText = PROPS.terminal.gpu;
     document.getElementById('customText').innerHTML = PROPS.terminal.customtext;
-    
     document.getElementById('bgImg').style = `
         background-image: url(${PROPS.general.imgPath});
         background-position: ${PROPS.general.imgPos.x}% ${PROPS.general.imgPos.y}%;
     `;
-    
     document.getElementById('musicInfo').style = `background-color: ${numToRGBA(PROPS.general.primary, 0.2)};`;
 }
-applyProperties();
 
 function numToRGBA(num, alpha = 1) {
     const rgb = numToRGB(num);
