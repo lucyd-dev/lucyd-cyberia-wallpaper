@@ -1,5 +1,6 @@
 {
 	"contentrating" : "Everyone",
+	"description" : "A lucyd wallpaper made for wallpaper engine with many customization options. Should work with the most resolutions and aspect ratios for desktop (eg. 16/9, 21/9, 4/3 and more).\r\n\r\nDownload and install it through the Steam Workshop (https://steamcommunity.com/sharedfiles/filedetails?id=3670970760) or look at the source code over on Github (https://github.com/lucyd-dev/lucyd-cyberia-wallpaper).\r\n\r\nIf you like my work, I would love if u leave a like/rating 💜\r\n\r\n\r\n🛠️ Customization\r\nYou can change your preferred colors, edit the name and almost all options in the terminals. It also shows your current media playing with a neat little titlebar.\r\n\r\nNote:\r\nBut keep in mind its not perfect as Wallpaper Engine does not always provide information.\r\nI tryed my best to compensate for it, for the best experience.\r\n\r\n\r\n🤝 Contribution\r\nIf you have problems or improvements, let my now by openenig an issue on my github or here in the disscusions.\r\n\r\n\r\n📄 Licence\r\nThis project is licensed under the GPLv3 License - see the LICENSE.md file for details.\r\n",
 	"file" : "index.html",
 	"general" : 
 	{
@@ -174,8 +175,8 @@
 	"ratingviolence" : "none",
 	"tags" : [ "Anime" ],
 	"title" : "Lucyd Cyberia",
-	"type" : "web",
-	"version" : 1,
+	"type" : "Web",
+	"version" : 2,
 	"visibility" : "public",
 	"workshopid" : "3670970760",
 	"workshopurl" : "steam://url/CommunityFilePage/3670970760"
