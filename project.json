@@ -2,11 +2,11 @@
 	"contentrating" : "Everyone",
 	"description" : "A lucyd wallpaper made for wallpaper engine with many customization options. Should work with the most resolutions and aspect ratios for desktop (eg. 16/9, 21/9, 4/3 and more).\r\n\r\nDownload and install it through the Steam Workshop [https://steamcommunity.com/sharedfiles/filedetails?id=3670970760] or look at the source code over on Github [https://github.com/lucyd-dev/lucyd-cyberia-wallpaper].\r\n\r\nIf you like my work, I would love if u leave a like/rating 💜\r\n\r\n\r\n🛠️ Customization\r\nYou can change your preferred colors, edit the name and almost all options in the terminals. It also shows your current media playing with a neat little titlebar.\r\n\r\nNote:\r\nBut keep in mind its not perfect as Wallpaper Engine does not always provide information.\r\nI tryed my best to compensate for it, for the best experience.\r\n\r\n\r\n🤝 Contribution\r\nIf you have problems or improvements, let me now by opening an issue on my github or here in the disscusions.\r\n\r\n\r\n📄 Licence\r\nThis project is licensed under the GPLv3 License - see the LICENSE.md file for details.\r\n",
 	"file" : "index.html",
-	"general" : 
+	"general" :
 	{
-		"properties" : 
+		"properties" :
 		{
-			"cpu" : 
+			"cpu" :
 			{
 				"index" : 15,
 				"order" : 115,
@@ -14,7 +14,7 @@
 				"type" : "textinput",
 				"value" : "AMD Ryzen 9 9950X3D @ 5.70GHz"
 			},
-			"customtext" : 
+			"customtext" :
 			{
 				"index" : 17,
 				"order" : 117,
@@ -22,7 +22,7 @@
 				"type" : "textinput",
 				"value" : "♥ tell something about u or write a poem ♥<br>Use &lt;br&gt; for a line break"
 			},
-			"general" : 
+			"general" :
 			{
 				"index" : 0,
 				"order" : 100,
@@ -30,7 +30,7 @@
 				"type" : "group",
 				"value" : ""
 			},
-			"gpu" : 
+			"gpu" :
 			{
 				"index" : 16,
 				"order" : 116,
@@ -38,7 +38,7 @@
 				"type" : "textinput",
 				"value" : "AMD Radeon RX 7900 XTX"
 			},
-			"host" : 
+			"host" :
 			{
 				"index" : 9,
 				"order" : 109,
@@ -46,7 +46,7 @@
 				"type" : "textinput",
 				"value" : "lucyd"
 			},
-			"image" : 
+			"image" :
 			{
 				"index" : 5,
 				"order" : 105,
@@ -54,7 +54,7 @@
 				"type" : "file",
 				"value" : ""
 			},
-			"imageposx" : 
+			"imageposx" :
 			{
 				"fraction" : true,
 				"index" : 6,
@@ -67,7 +67,7 @@
 				"type" : "slider",
 				"value" : 0
 			},
-			"imageposy" : 
+			"imageposy" :
 			{
 				"fraction" : true,
 				"index" : 7,
@@ -80,7 +80,7 @@
 				"type" : "slider",
 				"value" : 0
 			},
-			"os" : 
+			"os" :
 			{
 				"index" : 11,
 				"order" : 111,
@@ -88,7 +88,7 @@
 				"type" : "textinput",
 				"value" : "Windows 11 Professional"
 			},
-			"primary" : 
+			"primary" :
 			{
 				"index" : 1,
 				"order" : 101,
@@ -96,14 +96,14 @@
 				"type" : "color",
 				"value" : "0.6313725490196078 0.1450980392156863 1"
 			},
-			"schemecolor" : 
+			"schemecolor" :
 			{
 				"order" : 0,
 				"text" : "ui_browse_properties_scheme_color",
 				"type" : "color",
 				"value" : "0.6313725490196078 0.1450980392156863 1"
 			},
-			"secondary" : 
+			"secondary" :
 			{
 				"index" : 2,
 				"order" : 102,
@@ -111,7 +111,7 @@
 				"type" : "color",
 				"value" : "1 0 0.8980392156862745"
 			},
-			"shell" : 
+			"shell" :
 			{
 				"index" : 13,
 				"order" : 113,
@@ -119,7 +119,7 @@
 				"type" : "textinput",
 				"value" : "Powershell"
 			},
-			"systemname" : 
+			"systemname" :
 			{
 				"index" : 10,
 				"order" : 110,
@@ -127,7 +127,7 @@
 				"type" : "textinput",
 				"value" : "homedev"
 			},
-			"taskbarspacing" : 
+			"taskbarspacing" :
 			{
 				"index" : 3,
 				"order" : 103,
@@ -135,7 +135,7 @@
 				"type" : "bool",
 				"value" : true
 			},
-			"terminal" : 
+			"terminal" :
 			{
 				"index" : 14,
 				"order" : 114,
@@ -143,7 +143,7 @@
 				"type" : "textinput",
 				"value" : "Windows Terminal"
 			},
-			"terminalGroup" : 
+			"terminalGroup" :
 			{
 				"index" : 8,
 				"order" : 108,
@@ -151,7 +151,7 @@
 				"type" : "group",
 				"value" : ""
 			},
-			"title" : 
+			"title" :
 			{
 				"index" : 4,
 				"order" : 104,
@@ -159,7 +159,7 @@
 				"type" : "textinput",
 				"value" : "Lucyd"
 			},
-			"version" : 
+			"version" :
 			{
 				"index" : 12,
 				"order" : 112,
@@ -176,7 +176,7 @@
 	"tags" : [ "Anime" ],
 	"title" : "Lucyd Cyberia",
 	"type" : "web",
-	"version" : 2,
+	"version" : 3,
 	"visibility" : "public",
 	"workshopid" : "3670970760",
 	"workshopurl" : "steam://url/CommunityFilePage/3670970760"
