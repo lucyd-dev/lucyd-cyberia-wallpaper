@@ -199,7 +199,7 @@ body {
 				text-shadow: 0 0 8px var(--primary);
 			}
 			#blinkingCursor {
-				will-change: opacity;
+				animation: blink 1.2s ease-in-out infinite;
 			}
 		}
 		.fetch {
@@ -303,6 +303,7 @@ body {
 				height: 100%;
 				border-radius: 5px;
 				background-color: var(--secondary);
+				transition: width 1s linear;
 			}
 		}
 
@@ -381,5 +382,14 @@ body {
 	}
 	.slope, #audioVisual {
 		left: 16%;
+	}
+}
+
+@keyframes blink {
+	0%, 100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
 	}
 }

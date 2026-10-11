@@ -13,6 +13,9 @@ let position = 0;
 let duration = 0;
 let basePosition = 0;
 let lastTimelineUpdate = 0;
+let lastShownSecond = -1;
+let lastShownDuration = -1;
+let lastTimebarVisible = null;
 
 window.wallpaperRegisterMediaStatusListener((event) => {
 	if (!event.enabled) return;
@@ -51,7 +54,7 @@ window.wallpaperRegisterMediaTimelineListener((event) => {
 	lastTimelineUpdate = Date.now();
 
 	if (state !== wmi.PLAYBACK_PLAYING) {
-		updateTimebar();
+		updateTimebar(true);
 	}
 });
 
@@ -99,12 +102,11 @@ function setMediaThumbnail(thumbnail) {
 }
 
 function setTimebarState(isVisible) {
-	if (isVisible) {
-		document.getElementById('musicInfo').classList.remove('noTimebar');
-		return;
-	}
-
-	document.getElementById('musicInfo').classList.add('noTimebar');
+	if (isVisible === lastTimebarVisible) return;
+	lastTimebarVisible = isVisible;
+	document
+		.getElementById('musicInfo')
+		.classList.toggle('noTimebar', !isVisible);
 }
 
 function setStateIcon() {
@@ -119,11 +121,20 @@ function setStateIcon() {
 	}
 }
 
-function updateTimebar() {
+function updateTimebar(force) {
+	const sec = Math.floor(position);
+	const dur = Math.floor(duration);
+
+	if (!force && sec === lastShownSecond && dur === lastShownDuration) {
+		return;
+	}
+	lastShownSecond = sec;
+	lastShownDuration = dur;
+
 	document.getElementById('songPosition').innerText = formatTime(position);
 	document.getElementById('songDuration').innerText = formatTime(duration);
 	document.getElementById('songTimebar').style =
-		`--player-width: ${(position / duration) * 100}%;`;
+		`--player-width: ${duration ? (position / duration) * 100 : 0}%;`;
 }
 
 function resetMediaWidget() {
@@ -131,13 +142,13 @@ function resetMediaWidget() {
 	position = 0;
 	duration = 0;
 
-	document.getElementById('musicInfo').classList.add('noTimebar');
-	updateTimebar();
+	setTimebarState(false);
+	updateTimebar(true);
 
 	document.getElementById('songTitle').innerText = 'nothing playing rn';
 	document.getElementById('songArtist').innerText = '*play some good tunes*';
 	document.getElementById('musicWidget').style =
-		`background-image: url(https://picsum.photos/300);`;
-	document.getElementById('songCover').src = 'https://picsum.photos/300';
+		`background-image: url(assets/default-background.jpg);`;
+	document.getElementById('songCover').src = 'assets/default-background.jpg';
 }
-window.onload = resetMediaWidget();
+resetMediaWidget();

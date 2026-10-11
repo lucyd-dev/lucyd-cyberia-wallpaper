@@ -9,17 +9,21 @@
 
 const characters =
 	'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const rootStyle = getComputedStyle(document.documentElement);
-const fontsize = rootStyle.fontSize ? parseFloat(rootStyle.fontSize) : 16;
 const canvas = document.getElementById('matrix');
 const ctx = canvas.getContext('2d');
 const overlay = document.querySelector('.overlay');
 let columns = 0;
-let matrixTime = 0;
-
+let fontsize = 16;
 let symbols = [];
+let primaryColor = '';
+let secondaryColor = '';
+let lastPrimaryRaw = '';
+let lastSecondaryRaw = '';
 
 function resizeMatrix() {
+	const rootStyle = getComputedStyle(document.documentElement);
+	fontsize = rootStyle.fontSize ? parseFloat(rootStyle.fontSize) : 16;
+
 	const width = (overlay ? overlay.clientWidth : window.innerWidth) / 2;
 	const height = overlay ? overlay.clientHeight : window.innerHeight;
 
@@ -44,27 +48,43 @@ if (typeof ResizeObserver !== 'undefined' && overlay) {
 registerLoop('matrix', drawMatrix);
 
 function drawMatrix() {
+	if (PROPS.general.primary !== lastPrimaryRaw) {
+		lastPrimaryRaw = PROPS.general.primary;
+		primaryColor = numToRGBA(lastPrimaryRaw);
+	}
+	if (PROPS.general.secondary !== lastSecondaryRaw) {
+		lastSecondaryRaw = PROPS.general.secondary;
+		secondaryColor = numToRGBA(lastSecondaryRaw);
+	}
+
+	const fps = PROPS.fps || 30;
+	const step = 30 / fps;
+	const alpha = 1 - Math.pow(0.9, step);
+	const resetChance = 0.02 * step;
+
 	ctx.globalCompositeOperation = 'destination-out';
-	ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'; 
+	ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	ctx.globalCompositeOperation = 'source-over';
-	
+
+	ctx.textAlign = 'center';
+	ctx.font = `${fontsize}px monospace`;
+
 	symbols.forEach((symbol) => {
-		let text = characters.charAt(
-			Math.floor(Math.random() * characters.length)
-		);
-		
-		const color = Math.random() < 0.1 ? PROPS.general.secondary : PROPS.general.primary;
-		
-		ctx.textAlign = 'center';
-		ctx.fillStyle = numToRGBA(color);
-		ctx.font = `${fontsize}px monospace`;
-		ctx.fillText(text, symbol.x * fontsize, symbol.y * fontsize);
-		
-		if (symbol.y * fontsize > canvas.height && Math.random() < 0.02) {
+		const fromCell = Math.floor(symbol.y);
+		symbol.y += step;
+		const toCell = Math.floor(symbol.y);
+
+		for (let cell = fromCell + 1; cell <= toCell; cell++) {
+			const text = characters.charAt(
+				Math.floor(Math.random() * characters.length),
+			);
+			ctx.fillStyle = Math.random() < 0.1 ? secondaryColor : primaryColor;
+			ctx.fillText(text, symbol.x * fontsize, cell * fontsize);
+		}
+
+		if (symbol.y * fontsize > canvas.height && Math.random() < resetChance) {
 			symbol.y = 0;
-		} else {
-			symbol.y += 1;
 		}
 	});
 }

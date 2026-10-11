@@ -46,14 +46,15 @@ window.addEventListener('load', () => {
 
 window.addEventListener('resize', () => {
 	PROPS.terminal.resolution = `${window.outerWidth}x${window.outerHeight}`;
-    
-    applyProperties();
+	document.getElementById('resolution').innerText = PROPS.terminal.resolution;
 });
 
 window.wallpaperPropertyListener = {
     applyGeneralProperties: (properties) => {
-        if (properties.fps)
+        if (properties.fps) {
             PROPS.fps = properties.fps;
+            if (typeof setFps === 'function') setFps(properties.fps);
+        }
     },
     applyUserProperties: (properties) => {      
         if (properties.primary)

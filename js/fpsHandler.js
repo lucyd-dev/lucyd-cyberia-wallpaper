@@ -8,20 +8,21 @@
  */
 
 const continuousRenderers = new Map();
-const continuousAsyncRenderers = new Map();
 const dataRenderers = new Map();
 const latestData = new Map();
-const currentFps = 1000 / (PROPS.fps || 30);
-const virtualFps = 1000 / 30;
+const dataDirty = new Set();
+let frameInterval = 1000 / (PROPS.fps || 30);
+let maxDeltaTime = frameInterval * 5;
 let lastTime = 0;
 let timer = 0;
-const maxDeltaTime = currentFps * 5;
+
+function setFps(fps) {
+	frameInterval = 1000 / (fps || 30);
+	maxDeltaTime = frameInterval * 5;
+}
 
 function registerLoop(id, cb) {
 	continuousRenderers.set(id, cb);
-}
-function registerAsyncLoop(id, cb) {
-	continuousAsyncRenderers.set(id, cb);
 }
 
 function registerDataRenderer(id, cb) {
@@ -30,6 +31,7 @@ function registerDataRenderer(id, cb) {
 
 function updateData(id, data) {
 	latestData.set(id, data);
+	dataDirty.add(id);
 }
 
 function render(timeStamp = 0) {
@@ -40,10 +42,9 @@ function render(timeStamp = 0) {
 		return;
 	}
 
-
 	const deltaTime = Math.min(timeStamp - lastTime, maxDeltaTime);
 
-	if (deltaTime < currentFps) {
+	if (deltaTime < frameInterval) {
 		return;
 	}
 
@@ -53,18 +54,18 @@ function render(timeStamp = 0) {
 	if (timer > maxDeltaTime) {
 		timer = maxDeltaTime;
 	}
-    
-	while (timer >= virtualFps) {
+
+	while (timer >= frameInterval) {
 		continuousRenderers.forEach((cb) => cb());
 
 		dataRenderers.forEach((cb, id) => {
-			if (latestData.has(id)) {
-				cb({
-                    data: latestData.get(id)
-                });
+			if (dataDirty.has(id)) {
+				cb({ data: latestData.get(id) });
+				dataDirty.delete(id);
 			}
 		});
-		timer -= virtualFps;
+
+		timer -= frameInterval;
 	}
 }
 render();

@@ -43,12 +43,5 @@ function animateTerminal() {
 			load.innerText = `[${loadBar}]`;
 		}
 	}
-	
-	const cursor = document.getElementById('blinkingCursor');
-	if (cursor) {
-		const now = Date.now();
-		const opacity = (Math.sin(now * 0.005) + 1) / 2;
-		cursor.style.opacity = opacity;
-	}
 }
 registerLoop('terminal', animateTerminal);

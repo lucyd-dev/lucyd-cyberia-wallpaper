@@ -55,6 +55,7 @@ const color2Loc = gl.getUniformLocation(program, 'u_color2');
 const scaleLoc = gl.getUniformLocation(program, 'u_scale');
 
 let shaderTime = 0;
+let lastDrawTime = 0;
 let lastPrimary = '';
 let lastSecondary = '';
 
@@ -129,7 +130,10 @@ registerCamoTargets();
 registerLoop('camoFilter', drawCamo);
 
 function drawCamo() {
-	shaderTime += virtualFps * 0.001 * config.morphSpeed;
+	const now = performance.now();
+	const delta = lastDrawTime ? Math.min(now - lastDrawTime, 100) : 0;
+	lastDrawTime = now;
+	shaderTime += delta * 0.001 * config.morphSpeed;
 
 	if (
 		PROPS.general.primary !== lastPrimary ||
