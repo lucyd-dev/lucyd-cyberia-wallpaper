@@ -15,6 +15,7 @@ const currentFps = 1000 / (PROPS.fps || 30);
 const virtualFps = 1000 / 30;
 let lastTime = 0;
 let timer = 0;
+const maxDeltaTime = currentFps * 5;
 
 function registerLoop(id, cb) {
 	continuousRenderers.set(id, cb);
@@ -40,14 +41,18 @@ function render(timeStamp = 0) {
 	}
 
 
-	const deltaTime = timeStamp - lastTime;
-	
+	const deltaTime = Math.min(timeStamp - lastTime, maxDeltaTime);
+
 	if (deltaTime < currentFps) {
 		return;
 	}
 
 	lastTime = timeStamp;
 	timer += deltaTime;
+
+	if (timer > maxDeltaTime) {
+		timer = maxDeltaTime;
+	}
     
 	while (timer >= virtualFps) {
 		continuousRenderers.forEach((cb) => cb());

@@ -13,21 +13,33 @@ const rootStyle = getComputedStyle(document.documentElement);
 const fontsize = rootStyle.fontSize ? parseFloat(rootStyle.fontSize) : 16;
 const canvas = document.getElementById('matrix');
 const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth / 2;
-canvas.height = window.innerHeight;
-let columns = canvas.width / fontsize;
+const overlay = document.querySelector('.overlay');
+let columns = 0;
 let matrixTime = 0;
 
 let symbols = [];
-for (let i = 0; i < columns; i++) {
-	symbols.push({ x: i, y: Math.floor(Math.random() * -100) });
+
+function resizeMatrix() {
+	const width = (overlay ? overlay.clientWidth : window.innerWidth) / 2;
+	const height = overlay ? overlay.clientHeight : window.innerHeight;
+
+	canvas.width = width;
+	canvas.height = height;
+	columns = Math.floor(width / fontsize);
+
+	symbols = [];
+	for (let i = 0; i < columns; i++) {
+		symbols.push({ x: i, y: Math.floor(Math.random() * -100) });
+	}
 }
 
-window.addEventListener('resize', () => {
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-	columns = canvas.width / fontsize;
-});
+resizeMatrix();
+
+if (typeof ResizeObserver !== 'undefined' && overlay) {
+	new ResizeObserver(resizeMatrix).observe(overlay);
+} else {
+	window.addEventListener('resize', resizeMatrix);
+}
 
 registerLoop('matrix', drawMatrix);
 
