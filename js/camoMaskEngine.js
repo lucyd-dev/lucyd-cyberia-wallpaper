@@ -14,12 +14,14 @@ let config = {
 	color2: numToRGB(PROPS.general.secondary),
 };
 
+const RESOLUTION_SCALE = 0.5;
+
 const glCanvas = document.createElement('canvas');
 const gl = glCanvas.getContext('webgl');
 
 function resizeEngine() {
-	glCanvas.width = window.innerWidth;
-	glCanvas.height = window.innerHeight;
+	glCanvas.width = window.innerWidth * RESOLUTION_SCALE;
+	glCanvas.height = window.innerHeight * RESOLUTION_SCALE;
 	gl.viewport(0, 0, glCanvas.width, glCanvas.height);
 }
 window.addEventListener('resize', resizeEngine);
@@ -54,21 +56,91 @@ const color1Loc = gl.getUniformLocation(program, 'u_color1');
 const color2Loc = gl.getUniformLocation(program, 'u_color2');
 const scaleLoc = gl.getUniformLocation(program, 'u_scale');
 
-let lastRenderTime = 0;
 let shaderTime = 0;
+let lastPrimary = '';
+let lastSecondary = '';
 
+const camoTargets = [];
+
+function registerCamoTargets() {
+	camoTargets.length = 0;
+	document.querySelectorAll('.camo-fx').forEach((canvas) => {
+		camoTargets.push({
+			canvas,
+			ctx: canvas.getContext('2d'),
+			path: canvas.dataset.svg ? new Path2D(canvas.dataset.svg) : null,
+			text: '',
+			builtText: null,
+			fontStr: '',
+			fontSizePx: 0,
+			rect: { left: 0, top: 0 },
+		});
+	});
+	refreshCamoFonts();
+	updateCamoRects();
+}
+
+function refreshCamoFonts() {
+	camoTargets.forEach((target) => {
+		const styles = window.getComputedStyle(target.canvas);
+		target.fontStr = `${styles.fontWeight} ${styles.fontSize} ${styles.fontFamily}`;
+		target.fontSizePx = parseFloat(styles.fontSize);
+		target.builtText = null;
+	});
+}
+
+function fitCamoTarget(target) {
+	if (!target.text) return;
+
+	const { canvas, ctx } = target;
+	ctx.font = target.fontStr;
+
+	const targetW = Math.ceil(ctx.measureText(target.text).width);
+	const targetH = Math.ceil(target.fontSizePx * 1.1);
+
+	if (canvas.width !== targetW || canvas.height !== targetH) {
+		canvas.width = targetW;
+		canvas.height = targetH;
+	}
+
+	target.builtText = target.text;
+	target.rect = canvas.getBoundingClientRect();
+}
+
+function updateCamoRects() {
+	camoTargets.forEach((target) => {
+		target.rect = target.canvas.getBoundingClientRect();
+	});
+}
+
+function relayoutCamo() {
+	refreshCamoFonts();
+	camoTargets.forEach(fitCamoTarget);
+	updateCamoRects();
+}
+
+window.addEventListener('resize', relayoutCamo);
+
+if (document.fonts) {
+	document.fonts.ready.then(relayoutCamo);
+}
+
+registerCamoTargets();
 
 registerLoop('camoFilter', drawCamo);
 
 function drawCamo() {
-		shaderTime += virtualFps * 0.001 * config.morphSpeed;
-		
-		config.color1 = numToRGB(PROPS.general.primary);
-		config.color2 = numToRGB(PROPS.general.secondary);
+	shaderTime += virtualFps * 0.001 * config.morphSpeed;
 
-		gl.uniform2f(resolutionLoc, glCanvas.width, glCanvas.height);
-		gl.uniform1f(timeLoc, shaderTime);
-		gl.uniform1f(scaleLoc, config.scale);
+	if (
+		PROPS.general.primary !== lastPrimary ||
+		PROPS.general.secondary !== lastSecondary
+	) {
+		lastPrimary = PROPS.general.primary;
+		lastSecondary = PROPS.general.secondary;
+		config.color1 = numToRGB(lastPrimary);
+		config.color2 = numToRGB(lastSecondary);
+
 		gl.uniform3f(
 			color1Loc,
 			config.color1[0] / 255,
@@ -81,62 +153,51 @@ function drawCamo() {
 			config.color2[1] / 255,
 			config.color2[2] / 255,
 		);
-		gl.drawArrays(gl.TRIANGLES, 0, 6);
+	}
 
-		// B. Auto-Size and Pour into HTML targets
-		const targets = document.querySelectorAll('.camo-fx');
-		targets.forEach((canvas) => {
-			const ctx = canvas.getContext('2d');
+	gl.uniform2f(resolutionLoc, glCanvas.width, glCanvas.height);
+	gl.uniform1f(timeLoc, shaderTime);
+	gl.uniform1f(scaleLoc, config.scale);
+	gl.drawArrays(gl.TRIANGLES, 0, 6);
 
-			// --- NEW: Read styles directly from your CSS! ---
-			const styles = window.getComputedStyle(canvas);
-			const fontStr = `${styles.fontWeight} ${styles.fontSize} ${styles.fontFamily}`;
+	camoTargets.forEach((target) => {
+		const { canvas, ctx } = target;
+		const text = canvas.dataset.text || '';
 
-			if (canvas.dataset.text) {
-				ctx.font = fontStr;
-				const text = canvas.dataset.text;
+		if (text !== target.text || (text && target.builtText !== text)) {
+			target.text = text;
+			fitCamoTarget(target);
+		}
 
-				// Measure text width
-				const textW = ctx.measureText(text).width;
+		const w = canvas.width;
+		const h = canvas.height;
 
-				// Extract the exact pixel size from CSS (e.g., "120px" -> 120)
-				const fontSizePx = parseFloat(styles.fontSize);
+		ctx.globalCompositeOperation = 'source-over';
+		ctx.clearRect(0, 0, w, h);
+		ctx.fillStyle = 'white';
 
-				// Add safe padding to prevent ANY clipping
-				const targetW = Math.ceil(textW);
-				const targetH = Math.ceil(fontSizePx * 1.1);
+		if (text) {
+			ctx.font = target.fontStr;
+			ctx.textAlign = 'center';
+			ctx.textBaseline = 'middle';
+			ctx.fillText(text, w / 2, h / 2);
+		}
 
-				// Resize if needed
-				if (canvas.width !== targetW || canvas.height !== targetH) {
-					canvas.width = targetW;
-					canvas.height = targetH;
-				}
-			}
+		if (target.path) {
+			ctx.fill(target.path);
+		}
 
-			// Re-grab dimensions
-			const w = canvas.width;
-			const h = canvas.height;
-
-			// Clear the frame
-			ctx.globalCompositeOperation = 'source-over';
-			ctx.clearRect(0, 0, w, h);
-			ctx.fillStyle = 'white';
-
-			// Draw Text Stencil
-			if (canvas.dataset.text) {
-				ctx.font = fontStr; // Must set font again after a canvas resizes!
-				ctx.textAlign = 'center';
-				ctx.textBaseline = 'middle';
-				ctx.fillText(canvas.dataset.text, w / 2, h / 2);
-			}
-			// Draw SVG Stencil
-			if (canvas.dataset.svg) {
-				ctx.fill(new Path2D(canvas.dataset.svg));
-			}
-
-			// Cut out the Camouflage
-			ctx.globalCompositeOperation = 'source-in';
-			const rect = canvas.getBoundingClientRect();
-			ctx.drawImage(glCanvas, rect.left, rect.top, w, h, 0, 0, w, h);
-		});
+		ctx.globalCompositeOperation = 'source-in';
+		ctx.drawImage(
+			glCanvas,
+			target.rect.left * RESOLUTION_SCALE,
+			target.rect.top * RESOLUTION_SCALE,
+			w * RESOLUTION_SCALE,
+			h * RESOLUTION_SCALE,
+			0,
+			0,
+			w,
+			h,
+		);
+	});
 }
