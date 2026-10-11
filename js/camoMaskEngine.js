@@ -14,14 +14,12 @@ let config = {
 	color2: numToRGB(PROPS.general.secondary),
 };
 
-const RESOLUTION_SCALE = 0.5;
-
 const glCanvas = document.createElement('canvas');
 const gl = glCanvas.getContext('webgl');
 
 function resizeEngine() {
-	glCanvas.width = window.innerWidth * RESOLUTION_SCALE;
-	glCanvas.height = window.innerHeight * RESOLUTION_SCALE;
+	glCanvas.width = window.innerWidth;
+	glCanvas.height = window.innerHeight;
 	gl.viewport(0, 0, glCanvas.width, glCanvas.height);
 }
 window.addEventListener('resize', resizeEngine);
@@ -68,6 +66,7 @@ function registerCamoTargets() {
 		camoTargets.push({
 			canvas,
 			ctx: canvas.getContext('2d'),
+			svg: canvas.dataset.svg || '',
 			path: canvas.dataset.svg ? new Path2D(canvas.dataset.svg) : null,
 			text: '',
 			builtText: null,
@@ -169,6 +168,12 @@ function drawCamo() {
 			fitCamoTarget(target);
 		}
 
+		const svg = canvas.dataset.svg || '';
+		if (svg !== target.svg) {
+			target.svg = svg;
+			target.path = svg ? new Path2D(svg) : null;
+		}
+
 		const w = canvas.width;
 		const h = canvas.height;
 
@@ -188,16 +193,6 @@ function drawCamo() {
 		}
 
 		ctx.globalCompositeOperation = 'source-in';
-		ctx.drawImage(
-			glCanvas,
-			target.rect.left * RESOLUTION_SCALE,
-			target.rect.top * RESOLUTION_SCALE,
-			w * RESOLUTION_SCALE,
-			h * RESOLUTION_SCALE,
-			0,
-			0,
-			w,
-			h,
-		);
+		ctx.drawImage(glCanvas, target.rect.left, target.rect.top, w, h, 0, 0, w, h);
 	});
 }
