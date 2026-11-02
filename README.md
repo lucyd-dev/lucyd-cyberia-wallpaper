@@ -2,7 +2,7 @@
 
 A lucyd wallpaper made for wallpaper engine with many customization options. Should work with the most resolutions and aspect ratios for desktop (eg. 16/9, 21/9, 4/3 and more).
 
-Download and install it through the [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails?id=) or look at the source code over on [Github](https://github.com/lucyd-dev/lucyd-cyberia-wallpaper).
+Download and install it through the [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails?id=3670970760) or look at the source code over on [Github](https://github.com/lucyd-dev/lucyd-cyberia-wallpaper).
 
 If you like my work, I would love if u leave a like/rating 💜
 
