@@ -69,6 +69,15 @@ body {
 	background-position: 50% 50%;
 }
 
+#matrixGlow {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	pointer-events: none;
+	mix-blend-mode: screen;
+}
+
 #matrix {
 	position: absolute;
 	top: 0;
