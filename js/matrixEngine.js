@@ -84,7 +84,6 @@ function drawMatrix() {
 					Math.floor(Math.random() * characters.length),
 				),
 				cell,
-				color: Math.random() < 0.1 ? secondaryColor : primaryColor,
 			});
 		}
 
@@ -103,7 +102,7 @@ function drawMatrix() {
 			if (alpha < MIN_TRAIL_ALPHA) return;
 
 			ctx.globalAlpha = alpha;
-			ctx.fillStyle = glyph.color;
+			ctx.fillStyle = age < 1 ? secondaryColor : primaryColor;
 			ctx.fillText(glyph.char, symbol.x * fontsize, glyph.cell * fontsize);
 		});
 
