@@ -91,12 +91,13 @@ function formatTime(sec) {
 }
 
 function setMediaInfo(artist, title) {
+	document.getElementById('musicWidget').classList.remove('no-signal');
 	document.getElementById('songArtist').innerText = artist;
 	document.getElementById('songTitle').innerText = title;
 }
 
 function setMediaThumbnail(thumbnail) {
-	document.getElementById('musicWidget').style =
+	document.getElementById('musicBg').style =
 		`background-image: url(${thumbnail});`;
 	document.getElementById('songCover').src = thumbnail;
 }
@@ -141,14 +142,20 @@ function resetMediaWidget() {
 	state = wmi.PLAYBACK_STOPPED;
 	position = 0;
 	duration = 0;
+	lastTimebarVisible = true;
 
-	setTimebarState(false);
-	updateTimebar(true);
+	document.getElementById('musicInfo').classList.remove('noTimebar');
+	document.getElementById('musicWidget').classList.add('no-signal');
+	document.getElementById('songTitle').innerText = 'NO SIGNAL';
+	document.getElementById('songArtist').innerText = 'nothing playing rn';
+	document.getElementById('songPlayState').innerText = '';
+	document.getElementById('songPosition').innerText = '--:--';
+	document.getElementById('songDuration').innerText = '--:--';
+	document.getElementById('songTimebar').style = '--player-width: 0%;';
 
-	document.getElementById('songTitle').innerText = 'nothing playing rn';
-	document.getElementById('songArtist').innerText = '*play some good tunes*';
-	document.getElementById('musicWidget').style =
-		`background-image: url(assets/default-background.jpg);`;
-	document.getElementById('songCover').src = 'assets/default-background.jpg';
+	const idleImage = PROPS.general.imgPath || 'assets/default-background.jpg';
+	document.getElementById('musicBg').style =
+		`background-image: url(${idleImage});`;
+	document.getElementById('songCover').src = idleImage;
 }
 resetMediaWidget();

@@ -22,6 +22,7 @@ function updateClock() {
 	})}`;
 	clock.innerText = `${dateObj.toLocaleTimeString('en-GB')}`;
 }
+updateClock();
 setInterval(updateClock, 1000);
 
 function animateTerminal() {
@@ -39,8 +40,9 @@ function animateTerminal() {
 			}
 			
 			load.currentValue = Math.max(1, Math.min(10, lValue + step));
-			let loadBar = '#'.repeat(load.currentValue) + '-'.repeat(10 - load.currentValue);
-			load.innerText = `[${loadBar}]`;
+			load.innerHTML =
+				`<span class="loadFill">${'█'.repeat(load.currentValue)}</span>` +
+				`<span class="loadEmpty">${'░'.repeat(10 - load.currentValue)}</span>`;
 		}
 	}
 }

@@ -40,9 +40,11 @@ if (localStorage.getItem('PROPS')) {
     Object.assign(PROPS, savedProps);
 }
 
-window.addEventListener('load', () => {
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyProperties);
+} else {
     applyProperties();
-});
+}
 
 window.addEventListener('resize', () => {
 	PROPS.terminal.resolution = `${window.outerWidth}x${window.outerHeight}`;
@@ -128,7 +130,10 @@ function applyProperties() {
     
     document.body.style = `--primary: ${numToRGBA(PROPS.general.primary)}; --secondary: ${numToRGBA(PROPS.general.secondary)};`;
     document.getElementById('title').dataset.text = PROPS.general.title.toUpperCase();
-    document.getElementById('sessionName').innerText = `${PROPS.terminal.host}@${PROPS.terminal.systemname}`;
+    const sessionName = `${PROPS.terminal.host}@${PROPS.terminal.systemname}`;
+    document.querySelectorAll('.termUser').forEach((element) => {
+        element.innerText = sessionName;
+    });
     document.getElementById('os').innerText = PROPS.terminal.os;
     document.getElementById('version').innerText = PROPS.terminal.version;
     document.getElementById('shell').innerText = PROPS.terminal.shell;

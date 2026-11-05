@@ -105,6 +105,7 @@ function fitCamoTarget(target) {
 
 	target.builtText = target.text;
 	target.rect = canvas.getBoundingClientRect();
+	canvas.style.visibility = 'visible';
 }
 
 function updateCamoRects() {

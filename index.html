@@ -6,20 +6,26 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
 -->
- 
+
 <html lang="de">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="preload" href="fonts/VCR_OSD_MONO.woff" as="font" type="font/woff" crossorigin />
+		<link rel="preload" href="fonts/Inconsolata.woff" as="font" type="font/woff" crossorigin />
+		<link rel="preload" href="fonts/NotoSans.woff" as="font" type="font/woff" crossorigin />
 		<link rel="stylesheet" href="styles/main.css" />
 	</head>
 	<body>
 		<div class="overlay">
-			<div id="bgImg"></div>
+			<canvas id="space"></canvas>
+			<div id="bgFrame">
+				<div id="bgImg"></div>
+			</div>
 			<canvas id="matrixGlow"></canvas>
 			<canvas id="matrix"></canvas>
 			<canvas id="audioVisual"></canvas>
 			<div class="slope"></div>
-			
+
 			<div class="header">
 				<div class="clockWidget">
 					<canvas
@@ -36,14 +42,24 @@
 				<canvas
 					id="title"
 					class="camo-fx"
-					data-text="LUCYD CYBERIA"
+					data-text="LUCYD"
 				></canvas>
 			</div>
 			<div class="widgets">
 				<div class="terminalWidget glassFrame">
+					<svg class="frameBorder" aria-hidden="true" preserveAspectRatio="none"><path /></svg>
+					<span class="tick tick-tl"></span>
+					<span class="tick tick-br"></span>
+					<div class="panelBar">
+						<span class="prompt">&gt;_</span>
+						<span class="label">Terminal</span>
+						<span class="index">01</span>
+						<span class="rule"></span>
+						<span class="meta" id="projectVersion">v3.0</span>
+					</div>
 					<div class="terminalContent">
-						<p class="terminalLine">
-							→ <span class="primary">~</span> fastfetch
+						<p class="terminalLine command">
+							<span class="termUser"></span><span class="termDim">:</span><span class="termTilde">~</span><span class="termDim">$</span>&nbsp;fastfetch
 						</p>
 						<div class="terminalLine fetch">
 							<div class="fetchLogo primary">
@@ -71,55 +87,74 @@
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠁⠉⠛⠛⠉⠉⠉⠉⠁⠉⠁⠁⠁⠉⠉⠉⠒⠉⠁⠉⠀⠀⠀⠀⠀⠀⠀⠀
 							</div>
 							<div>
-								<p>
-									<span class="primary" id="sessionName"></span><br />
-									------------------
-								</p>
 								<div class="fetchInfo">
-									<p>
-										OS<br />
-										Version<br />
-										Shell<br />
-										Terminal<br />
-										Resolution<br />
-										CPU<br />
-										GPU<br />
-										CPU Usage<br />
-										Memory<br />
-										Disk [C:]<br />
-									</p>
-									<p>
-										<span id="os"></span><br />
-										<span id="version"></span><br />
-										<span id="shell"></span><br />
-										<span id="terminal"></span><br />
-										<span id="resolution"></span><br />
-										<span id="cpu"></span><br />
-										<span id="gpu"></span><br />
-										<span class="load">[######----]</span> 787 processes<br />
-										<span class="load">[#####-----]</span> 13.12 GiB / 29.80
-										GiB<br />
-										[#######---] 1420 GiB / 1862 GiB<br />
-									</p>
+									<div class="fetchRow">
+										<span class="fetchKey">OS</span>
+										<span class="fetchValue"><span id="os"></span></span>
+									</div>
+									<div class="fetchRow">
+										<span class="fetchKey">Version</span>
+										<span class="fetchValue"><span id="version"></span></span>
+									</div>
+									<div class="fetchRow">
+										<span class="fetchKey">Shell</span>
+										<span class="fetchValue"><span id="shell"></span></span>
+									</div>
+									<div class="fetchRow">
+										<span class="fetchKey">Terminal</span>
+										<span class="fetchValue"><span id="terminal"></span></span>
+									</div>
+									<div class="fetchRow">
+										<span class="fetchKey">Resolution</span>
+										<span class="fetchValue"><span id="resolution"></span></span>
+									</div>
+									<div class="fetchRow">
+										<span class="fetchKey">CPU</span>
+										<span class="fetchValue"><span id="cpu"></span></span>
+									</div>
+									<div class="fetchRow">
+										<span class="fetchKey">GPU</span>
+										<span class="fetchValue"><span id="gpu"></span></span>
+									</div>
+									<div class="fetchRow">
+										<span class="fetchKey">CPU Usage</span>
+										<span class="fetchValue"><span class="load"><span class="loadFill">██████</span><span class="loadEmpty">░░░░</span></span> 787 processes</span>
+									</div>
+									<div class="fetchRow">
+										<span class="fetchKey">Memory</span>
+										<span class="fetchValue"><span class="load"><span class="loadFill">█████</span><span class="loadEmpty">░░░░░</span></span> 13.12 GiB / 29.80 GiB</span>
+									</div>
+									<div class="fetchRow">
+										<span class="fetchKey">Disk [C:]</span>
+										<span class="fetchValue"><span class="loadStatic"><span class="loadFill">████████</span><span class="loadEmpty">░░</span></span> 1420 GiB / 1862 GiB</span>
+									</div>
 								</div>
 							</div>
 						</div>
 
-						<p class="terminalLine">
-							→ <span class="primary">~</span> aboutme
+						<p class="terminalLine command">
+							<span class="termUser"></span><span class="termDim">:</span><span class="termTilde">~</span><span class="termDim">$</span>&nbsp;aboutme
 						</p>
 						<p class="terminalLine aboutme">
-							<span class="primary" id="customText">
+							<span class="secondary" id="customText">
 							</span>
 						</p>
-						<p class="terminalLine">
-							→ <span class="primary">~</span>
-							<span id="blinkingCursor">|</span>
+						<p class="terminalLine command">
+							<span class="termUser"></span><span class="termDim">:</span><span class="termTilde">~</span><span class="termDim">$</span>&nbsp;<span id="blinkingCursor">|</span>
 						</p>
+						<div class="ghostWord" aria-hidden="true">CYBERIA</div>
 					</div>
 				</div>
 				<div id="musicWidget" class="glassFrame">
-					<img id="songCover" src="" />
+					<svg class="frameBorder" aria-hidden="true" preserveAspectRatio="none"><path /></svg>
+					<div id="musicBg" style="background-image: url('assets/default-background.jpg')"></div>
+					<span class="tick tick-tl"></span>
+					<span class="tick tick-br"></span>
+					<div class="nowPlaying">
+						<span class="npIcon">♪</span>
+						<span>Now playing</span>
+					</div>
+					<img id="songCover" src="assets/default-background.jpg" />
 					<div id="musicInfo">
 						<div id="songTitle"></div>
 						<div id="songArtist"></div>
@@ -134,10 +169,13 @@
 					</div>
 				</div>
 			</div>
+			<div class="sideCaption" aria-hidden="true">Lucyd · Cyberia · 2026</div>
 		</div>
-		
+
 		<script type="text/javascript" src="js/properties.js"></script>
 		<script type="text/javascript" src="js/fpsHandler.js"></script>
+		<script type="text/javascript" src="js/layoutEngine.js"></script>
+		<script type="text/javascript" src="js/spaceEngine.js"></script>
 		<script type="text/javascript" src="js/widgets.js"></script>
 		<script type="text/javascript" src="js/mediaInfo.js"></script>
 		<script type="text/javascript" src="js/audioVisualizerEngine.js"></script>
