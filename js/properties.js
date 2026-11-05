@@ -130,6 +130,8 @@ function applyProperties() {
     
     document.body.style = `--primary: ${numToRGBA(PROPS.general.primary)}; --secondary: ${numToRGBA(PROPS.general.secondary)};`;
     document.getElementById('title').dataset.text = PROPS.general.title.toUpperCase();
+    document.querySelector('.sideCaption').innerText =
+        `${PROPS.general.title || 'Lucyd'} · Cyberia · 2026`;
     const sessionName = `${PROPS.terminal.host}@${PROPS.terminal.systemname}`;
     document.querySelectorAll('.termUser').forEach((element) => {
         element.innerText = sessionName;
