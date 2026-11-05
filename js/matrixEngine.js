@@ -20,6 +20,10 @@ let secondaryColor = '';
 let lastPrimaryRaw = '';
 let lastSecondaryRaw = '';
 
+const TRAIL_LENGTH = 14;
+const TRAIL_FALLOFF = 1.6;
+const MIN_TRAIL_ALPHA = 0.02;
+
 function resizeMatrix() {
 	const rootStyle = getComputedStyle(document.documentElement);
 	fontsize = rootStyle.fontSize ? parseFloat(rootStyle.fontSize) : 16;
@@ -33,7 +37,11 @@ function resizeMatrix() {
 
 	symbols = [];
 	for (let i = 0; i < columns; i++) {
-		symbols.push({ x: i, y: Math.floor(Math.random() * -100) });
+		symbols.push({
+			x: i,
+			y: Math.floor(Math.random() * -100),
+			trail: [],
+		});
 	}
 }
 
@@ -58,15 +66,10 @@ function drawMatrix() {
 	}
 
 	const fps = PROPS.fps || 30;
-	const step = 30 / fps;
-	const alpha = 1 - Math.pow(0.9, step);
+	const step = 20 / fps;
 	const resetChance = 0.02 * step;
 
-	ctx.globalCompositeOperation = 'destination-out';
-	ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	ctx.globalCompositeOperation = 'source-over';
-
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.textAlign = 'center';
 	ctx.font = `${fontsize}px monospace`;
 
@@ -76,15 +79,39 @@ function drawMatrix() {
 		const toCell = Math.floor(symbol.y);
 
 		for (let cell = fromCell + 1; cell <= toCell; cell++) {
-			const text = characters.charAt(
-				Math.floor(Math.random() * characters.length),
-			);
-			ctx.fillStyle = Math.random() < 0.1 ? secondaryColor : primaryColor;
-			ctx.fillText(text, symbol.x * fontsize, cell * fontsize);
+			symbol.trail.push({
+				char: characters.charAt(
+					Math.floor(Math.random() * characters.length),
+				),
+				cell,
+				color: Math.random() < 0.1 ? secondaryColor : primaryColor,
+			});
 		}
+
+		while (
+			symbol.trail.length &&
+			symbol.y - symbol.trail[0].cell >= TRAIL_LENGTH
+		) {
+			symbol.trail.shift();
+		}
+
+		symbol.trail.forEach((glyph) => {
+			const age = symbol.y - glyph.cell;
+			if (age < 0) return;
+
+			const alpha = Math.pow(1 - age / TRAIL_LENGTH, TRAIL_FALLOFF);
+			if (alpha < MIN_TRAIL_ALPHA) return;
+
+			ctx.globalAlpha = alpha;
+			ctx.fillStyle = glyph.color;
+			ctx.fillText(glyph.char, symbol.x * fontsize, glyph.cell * fontsize);
+		});
 
 		if (symbol.y * fontsize > canvas.height && Math.random() < resetChance) {
 			symbol.y = 0;
+			symbol.trail.length = 0;
 		}
 	});
+
+	ctx.globalAlpha = 1;
 }
