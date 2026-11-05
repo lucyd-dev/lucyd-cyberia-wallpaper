@@ -8,7 +8,11 @@
  */
 
 const wmi = window.wallpaperMediaIntegration;
+const RESET_DELAY = 1200;
+const FADE_DURATION = 480;
+
 let state = wmi.PLAYBACK_PLAYING;
+let iconState = wmi.PLAYBACK_PLAYING;
 let position = 0;
 let duration = 0;
 let basePosition = 0;
@@ -16,29 +20,47 @@ let lastTimelineUpdate = 0;
 let lastShownSecond = -1;
 let lastShownDuration = -1;
 let lastTimebarVisible = null;
+let resetTimer = null;
+let mediaVersion = 0;
+let backgroundTimer = null;
+let backgroundToken = 0;
+let coverTimer = null;
+let coverToken = 0;
 
 window.wallpaperRegisterMediaStatusListener((event) => {
 	if (!event.enabled) return;
 
-	resetMediaWidget();
+	const widget = document.getElementById('musicWidget');
+	if (!widget.classList.contains('no-signal')) return;
+
+	scheduleReset();
 });
 window.wallpaperRegisterMediaPropertiesListener((event) => {
 	if (event.contentType === '') {
-		resetMediaWidget();
+		scheduleReset();
 		return;
 	}
 
-	timeoutIfNotPlaying(() => setMediaInfo(event.artist, event.title));
+	mediaVersion += 1;
+	queueMediaUpdate(() => setMediaInfo(event.artist, event.title));
 });
 window.wallpaperRegisterMediaThumbnailListener((event) => {
 	const thumbnail = event.thumbnail;
 	if (thumbnail === '' || thumbnail === 'data:image/png;base64,') return;
 
-	timeoutIfNotPlaying(() => setMediaThumbnail(thumbnail));
+	mediaVersion += 1;
+	queueMediaUpdate(() => setMediaThumbnail(thumbnail));
 });
 window.wallpaperRegisterMediaPlaybackListener((event) => {
 	state = event.state;
-	if (state === wmi.PLAYBACK_STOPPED) resetMediaWidget();
+
+	if (state === wmi.PLAYBACK_STOPPED) {
+		scheduleReset();
+		return;
+	}
+
+	iconState = state;
+	cancelReset();
 	setStateIcon();
 });
 window.wallpaperRegisterMediaTimelineListener((event) => {
@@ -64,6 +86,13 @@ registerLoop('mediaTimer', () => {
 		return;
 	}
 
+	if (
+		document.getElementById('musicWidget').classList.contains('no-signal')
+	) {
+		lastTimelineUpdate = Date.now();
+		return;
+	}
+
 	const elapsed = (Date.now() - lastTimelineUpdate) / 1000;
 	let newPos = basePosition + elapsed;
 	if (newPos > duration) newPos = duration;
@@ -73,13 +102,38 @@ registerLoop('mediaTimer', () => {
 	updateTimebar();
 });
 
-function timeoutIfNotPlaying(callback) {
-	if (state !== wmi.PLAYBACK_PLAYING) {
+function queueMediaUpdate(callback) {
+	cancelReset();
+
+	const isShowingNoSignal = document
+		.getElementById('musicWidget')
+		.classList.contains('no-signal');
+
+	if (state === wmi.PLAYBACK_STOPPED && isShowingNoSignal) {
 		setTimeout(callback, 500);
 		return;
 	}
 
 	callback();
+}
+
+function cancelReset() {
+	if (resetTimer === null) return;
+
+	clearTimeout(resetTimer);
+	resetTimer = null;
+}
+
+function scheduleReset() {
+	const version = mediaVersion;
+
+	clearTimeout(resetTimer);
+	resetTimer = setTimeout(() => {
+		resetTimer = null;
+		if (version !== mediaVersion) return;
+
+		resetMediaWidget();
+	}, RESET_DELAY);
 }
 
 function formatTime(sec) {
@@ -91,15 +145,107 @@ function formatTime(sec) {
 }
 
 function setMediaInfo(artist, title) {
-	document.getElementById('musicWidget').classList.remove('no-signal');
-	document.getElementById('songArtist').innerText = artist;
-	document.getElementById('songTitle').innerText = title;
+	cancelReset();
+
+	const widget = document.getElementById('musicWidget');
+	const wasNoSignal = widget.classList.contains('no-signal');
+	widget.classList.remove('no-signal');
+
+	if (wasNoSignal) {
+		state = wmi.PLAYBACK_PLAYING;
+		iconState = wmi.PLAYBACK_PLAYING;
+	}
+
+	setStateIcon();
+
+	const artistEl = document.getElementById('songArtist');
+	const titleEl = document.getElementById('songTitle');
+	const changed =
+		artistEl.innerText !== artist || titleEl.innerText !== title;
+
+	artistEl.innerText = artist;
+	titleEl.innerText = title;
+
+	if (changed) {
+		fadeSongText(artistEl);
+		fadeSongText(titleEl);
+	}
+}
+
+function fadeSongText(element) {
+	element.classList.remove('songFade');
+	void element.offsetWidth;
+	element.classList.add('songFade');
 }
 
 function setMediaThumbnail(thumbnail) {
-	document.getElementById('musicBg').style =
-		`background-image: url(${thumbnail});`;
-	document.getElementById('songCover').src = thumbnail;
+	crossfadeBackground(thumbnail);
+	crossfadeCover(thumbnail);
+}
+
+function crossfadeBackground(url, immediate) {
+	const base = document.getElementById('musicBg');
+	const next = document.getElementById('musicBgNext');
+	const value = `url(${url})`;
+
+	backgroundToken += 1;
+	const token = backgroundToken;
+
+	clearTimeout(backgroundTimer);
+	backgroundTimer = null;
+
+	if (immediate || !next) {
+		base.style.backgroundImage = value;
+		if (next) next.classList.remove('show');
+		return;
+	}
+
+	next.style.backgroundImage = value;
+	void next.offsetWidth;
+	next.classList.add('show');
+
+	backgroundTimer = setTimeout(() => {
+		if (token !== backgroundToken) return;
+
+		base.style.backgroundImage = value;
+		next.classList.remove('show');
+		backgroundTimer = null;
+	}, FADE_DURATION);
+}
+
+function crossfadeCover(url, immediate) {
+	const base = document.getElementById('songCover');
+	const next = document.getElementById('songCoverNext');
+
+	coverToken += 1;
+	const token = coverToken;
+
+	clearTimeout(coverTimer);
+	coverTimer = null;
+
+	if (immediate || !next) {
+		base.src = url;
+		if (next) next.classList.remove('show');
+		return;
+	}
+
+	const preload = new Image();
+	preload.onload = () => {
+		if (token !== coverToken) return;
+
+		next.src = url;
+		void next.offsetWidth;
+		next.classList.add('show');
+
+		coverTimer = setTimeout(() => {
+			if (token !== coverToken) return;
+
+			base.src = url;
+			next.classList.remove('show');
+			coverTimer = null;
+		}, FADE_DURATION);
+	};
+	preload.src = url;
 }
 
 function setTimebarState(isVisible) {
@@ -111,14 +257,21 @@ function setTimebarState(isVisible) {
 }
 
 function setStateIcon() {
-	let playStateEl = document.getElementById('songPlayState');
+	const playStateEl = document.getElementById('songPlayState');
 
-	if (state === wmi.PLAYBACK_PLAYING) {
+	if (
+		document.getElementById('musicWidget').classList.contains('no-signal')
+	) {
+		playStateEl.innerText = '';
+		return;
+	}
+
+	if (iconState === wmi.PLAYBACK_PLAYING) {
 		playStateEl.innerText = '▶';
-	} else if (state === wmi.PLAYBACK_PAUSED) {
+	} else if (iconState === wmi.PLAYBACK_PAUSED) {
 		playStateEl.innerText = '⏸';
 	} else {
-		playStateEl.innerText = '⏹';
+		playStateEl.innerText = '';
 	}
 }
 
@@ -138,8 +291,11 @@ function updateTimebar(force) {
 		`--player-width: ${duration ? (position / duration) * 100 : 0}%;`;
 }
 
-function resetMediaWidget() {
+function resetMediaWidget(immediate) {
+	cancelReset();
+
 	state = wmi.PLAYBACK_STOPPED;
+	iconState = wmi.PLAYBACK_STOPPED;
 	position = 0;
 	duration = 0;
 	lastTimebarVisible = true;
@@ -154,8 +310,7 @@ function resetMediaWidget() {
 	document.getElementById('songTimebar').style = '--player-width: 0%;';
 
 	const idleImage = PROPS.general.imgPath || 'assets/default-background.jpg';
-	document.getElementById('musicBg').style =
-		`background-image: url(${idleImage});`;
-	document.getElementById('songCover').src = idleImage;
+	crossfadeBackground(idleImage, immediate);
+	crossfadeCover(idleImage, immediate);
 }
-resetMediaWidget();
+resetMediaWidget(true);

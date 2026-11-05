@@ -148,13 +148,17 @@
 				<div id="musicWidget" class="glassFrame">
 					<svg class="frameBorder" aria-hidden="true" preserveAspectRatio="none"><path /></svg>
 					<div id="musicBg" style="background-image: url('assets/default-background.jpg')"></div>
+					<div id="musicBgNext"></div>
 					<span class="tick tick-tl"></span>
 					<span class="tick tick-br"></span>
 					<div class="nowPlaying">
 						<span class="npIcon">♪</span>
 						<span>Now playing</span>
 					</div>
-					<img id="songCover" src="assets/default-background.jpg" />
+					<div class="coverStack">
+						<img id="songCover" src="assets/default-background.jpg" />
+						<img id="songCoverNext" alt="" />
+					</div>
 					<div id="musicInfo">
 						<div id="songTitle"></div>
 						<div id="songArtist"></div>
