@@ -1,0 +1,53 @@
+/*
+ * Project: lucyd-cyberia-wallpaper
+ * Copyright (c) 2026 LucydDev
+ * * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ */
+
+.header {
+	position: absolute;
+	top: 20px;
+	right: 50px;
+	width: 55%;
+	display: flex;
+	align-items: center;
+
+	.clockWidget {
+		display: flex;
+		align-items: center;
+		width: max-content;
+		margin: 10px;
+		text-align: center;
+
+		.dayNight {
+			width: 3.5rem;
+			margin-right: 20px;
+		}
+
+		.currentDate {
+			#clock {
+				font-family: 'VCR OSD Mono', serif;
+				font-size: 3rem;
+				color: var(--color);
+			}
+
+			#date {
+				font-family: 'VCR OSD Mono', serif;
+				font-size: calc(3rem * 8 / 13);
+				color: #aaa;
+			}
+		}
+	}
+
+	#title {
+		visibility: hidden;
+		font-size: 7rem;
+		font-weight: 900;
+		margin: 0 0 -1rem auto;
+		letter-spacing: 0.2rem;
+	}
+}
+

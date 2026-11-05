@@ -1,0 +1,18 @@
+{
+	"name": "lucyd-cyberia-wallpaper",
+	"version": "3.0.0",
+	"private": true,
+	"type": "module",
+	"description": "Lucyd Cyberia wallpaper for Wallpaper Engine",
+	"license": "GPL-3.0-or-later",
+	"scripts": {
+		"build": "node scripts/build.mjs",
+		"build:raw": "node scripts/build.mjs --no-minify",
+		"watch": "node scripts/build.mjs --watch",
+		"publish": "node scripts/build.mjs --publish",
+		"serve": "python3 -m http.server 8768 --directory ."
+	},
+	"devDependencies": {
+		"esbuild": "^0.25.0"
+	}
+}

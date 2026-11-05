@@ -1,0 +1,79 @@
+/*
+ * Project: lucyd-cyberia-wallpaper
+ * Copyright (c) 2026 LucydDev
+ * * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ */
+
+@media screen and (max-height: 1300px) {
+	html {
+		font-size: 16px;
+	}
+	.widgets {
+		top: 150px;
+		height: calc(100% - 150px);
+	}
+	#musicWidget {
+		height: 250px;
+	}
+}
+@media screen and (max-height: 1000px) {
+	html {
+		font-size: 14px;
+	}
+	.widgets {
+		top: 120px;
+		height: calc(100% - 120px);
+	}
+	#musicWidget {
+		height: 200px;
+	}
+}
+
+@media (min-aspect-ratio: 32 / 9) {
+	.slope, #audioVisual {
+		left: 35%;
+	}
+}@media (min-aspect-ratio: 21 / 9) and (max-aspect-ratio: 32 / 9) {
+	.slope, #audioVisual {
+		left: 32%;
+	}
+}
+@media (min-aspect-ratio: 16 / 9) and (max-aspect-ratio: 21 / 9) {
+	.slope, #audioVisual {
+		left: 29%;
+	}
+}
+@media (min-aspect-ratio: 3 / 2) and (max-aspect-ratio: 16 / 9) {
+	.slope, #audioVisual {
+		left: 26%;
+	}
+}
+@media (min-aspect-ratio: 4 / 3) and (max-aspect-ratio: 3 / 2) {
+	.slope, #audioVisual {
+		left: 24%;
+	}
+}
+@media (min-aspect-ratio: 1 / 1) and (max-aspect-ratio: 4 / 3) {
+	html {
+		font-size: 12px;
+	}
+	.widgets {
+		top: 120px;
+		height: calc(100% - 120px);
+	}
+	.slope, #audioVisual {
+		left: 16%;
+	}
+}
+
+@keyframes blink {
+	0%, 100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+}

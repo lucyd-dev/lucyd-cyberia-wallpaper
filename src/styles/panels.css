@@ -1,0 +1,194 @@
+/*
+ * Project: lucyd-cyberia-wallpaper
+ * Copyright (c) 2026 LucydDev
+ * * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ */
+
+.glassFrame {
+	--cut: 26px;
+	position: relative;
+	overflow: hidden;
+	border-radius: 0;
+	padding: 1px;
+	background: none;
+	clip-path: polygon(
+		0 0,
+		calc(100% - var(--cut)) 0,
+		100% var(--cut),
+		100% 100%,
+		var(--cut) 100%,
+		0 calc(100% - var(--cut))
+	);
+
+	> * {
+		position: relative;
+		z-index: 1;
+	}
+}
+
+.terminalWidget.glassFrame::before {
+	content: '';
+	position: absolute;
+	inset: 1px;
+	z-index: 0;
+	pointer-events: none;
+	background: linear-gradient(160deg, var(--panel-top), var(--panel-bottom));
+	clip-path: polygon(
+		0 0,
+		calc(100% - var(--cut)) 0,
+		100% var(--cut),
+		100% 100%,
+		var(--cut) 100%,
+		0 calc(100% - var(--cut))
+	);
+}
+
+#musicBg,
+#musicBgNext {
+	position: absolute;
+	inset: 1px;
+	z-index: 0;
+	background-size: cover;
+	background-position: center center;
+	filter: brightness(0.65);
+	clip-path: polygon(
+		0 0,
+		calc(100% - var(--cut)) 0,
+		100% var(--cut),
+		100% 100%,
+		var(--cut) 100%,
+		0 calc(100% - var(--cut))
+	);
+	transition: opacity 0.45s ease, filter 0.45s ease;
+}
+
+#musicBgNext {
+	opacity: 0;
+}
+
+#musicBgNext.show {
+	opacity: 1;
+}
+
+.coverStack {
+	position: relative;
+	flex: 0 0 auto;
+	height: 100%;
+	aspect-ratio: 1 / 1;
+	overflow: hidden;
+}
+
+#songCover,
+#songCoverNext {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	background-color: var(--bg);
+	transition: filter 0.45s ease;
+}
+
+#songCoverNext {
+	position: absolute;
+	inset: 0;
+	background-color: transparent;
+	opacity: 0;
+	transition: opacity 0.45s ease, filter 0.45s ease;
+}
+
+#songCoverNext.show {
+	opacity: 1;
+}
+
+@keyframes songFade {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+#songTitle.songFade,
+#songArtist.songFade {
+	animation: songFade 0.35s ease;
+}
+
+.frameBorder {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 4;
+	pointer-events: none;
+	overflow: visible;
+}
+
+.frameBorder path {
+	fill: none;
+	stroke: var(--frame);
+	stroke-width: 1.5;
+}
+
+.tick {
+	position: absolute;
+	width: 11px;
+	height: 11px;
+	z-index: 3;
+	pointer-events: none;
+	border: 0 solid var(--secondary);
+}
+
+.tick-tl {
+	top: 5px;
+	left: 5px;
+	border-top-width: 1px;
+	border-left-width: 1px;
+}
+
+.tick-br {
+	bottom: 5px;
+	right: 5px;
+	border-bottom-width: 1px;
+	border-right-width: 1px;
+}
+
+.panelBar {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding: 20px 26px 12px;
+	font-family: 'Inconsolata', monospace;
+	font-size: 0.66rem;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: var(--chrome-dim);
+
+	.prompt {
+		color: var(--secondary);
+		letter-spacing: 0;
+	}
+
+	.label {
+		color: var(--chrome-bright);
+	}
+
+	.index {
+		color: var(--secondary);
+	}
+
+	.rule {
+		flex: 1;
+		height: 1px;
+		background: linear-gradient(90deg, var(--line-strong), transparent);
+	}
+
+	.meta {
+		color: var(--chrome-dim);
+	}
+}
+

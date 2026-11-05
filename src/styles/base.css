@@ -1,0 +1,60 @@
+/*
+ * Project: lucyd-cyberia-wallpaper
+ * Copyright (c) 2026 LucydDev
+ * * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ */
+
+
+@font-face {
+	font-family: 'Noto Sans';
+	src: url('../../fonts/NotoSans.woff') format('woff');
+	font-display: block;
+}
+@font-face {
+	font-family: 'VCR OSD Mono';
+	src: url('../../fonts/VCR_OSD_MONO.woff') format('woff');
+	font-display: block;
+}
+@font-face {
+	font-family: 'Inconsolata';
+	src: url('../../fonts/Inconsolata.woff') format('woff');
+	font-display: block;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+	font-size: 22px;
+}
+
+body {
+	--primary: rgb(161, 37, 255);
+	--secondary: rgb(255, 0, 229);
+	--color: #fff;
+	--color2: #999;
+	--bg: #06050c;
+	--line: color-mix(in srgb, var(--primary) 22%, transparent);
+	--line-strong: color-mix(in srgb, var(--primary) 50%, transparent);
+	--line-soft: color-mix(in srgb, var(--primary) 16%, transparent);
+	--chrome: color-mix(in srgb, var(--primary) 40%, #b9a7db);
+	--chrome-bright: color-mix(in srgb, var(--primary) 22%, #e9e2f7);
+	--chrome-dim: color-mix(in srgb, var(--primary) 30%, #8b7ea8);
+	--panel-top: color-mix(in srgb, var(--primary) 12%, #0a0714);
+	--panel-bottom: color-mix(in srgb, var(--primary) 4%, #04030a);
+	--frame: color-mix(in srgb, var(--primary) 40%, #e6dcff);
+
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	color: var(--color);
+	background-color: var(--bg);
+}
+

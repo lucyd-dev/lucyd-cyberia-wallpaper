@@ -7,9 +7,14 @@
  * (at your option) any later version.
  */
 
-const vsSource = `attribute vec2 position; void main() { gl_Position = vec4(position, 0.0, 1.0); }`;
+(function (app) {
+	'use strict';
 
-const fsSource = `
+	// Camouflage pattern shader used as a mask for the clock glyph and the title.
+	
+	const vsSource = `attribute vec2 position; void main() { gl_Position = vec4(position, 0.0, 1.0); }`;
+	
+	const fsSource = `
   precision highp float;
   uniform vec2 u_resolution;
   uniform float u_time;
@@ -75,3 +80,9 @@ const fsSource = `
     gl_FragColor = vec4(mix(u_color1, u_color2, camo), 1.0);
   }
 `;
+
+	app.camoShader = {
+		vsSource: vsSource,
+		fsSource: fsSource,
+	};
+})(window.Lucyd = window.Lucyd || {});

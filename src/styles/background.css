@@ -1,0 +1,83 @@
+/*
+ * Project: lucyd-cyberia-wallpaper
+ * Copyright (c) 2026 LucydDev
+ * * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ */
+
+.overlay {
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+
+	&.spacingTaskbar {
+		height: calc(100vh - 60px);
+	}
+}
+
+#space {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	display: block;
+	pointer-events: none;
+}
+
+#bgFrame {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 50%;
+	height: 100%;
+}
+
+#bgImg {
+	position: absolute;
+	inset: 0;
+	background: url('../../assets/default-background.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50% 50%;
+}
+
+#matrixGlow {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	pointer-events: none;
+	mix-blend-mode: screen;
+}
+
+#matrix {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+}
+
+#audioVisual {
+	position: absolute;
+	bottom: 0;
+	left: 20%;
+	transform-origin: left bottom;
+	transform: rotate(-75deg) translate(-2%);
+	mix-blend-mode: screen;
+}
+
+.slope {
+	position: absolute;
+	bottom: 0;
+	left: 20%;
+	width: 100%;
+	height: 140%;
+	background-color: transparent;
+	border-left: 1.5px solid var(--frame);
+	transform-origin: left bottom;
+	transform: rotate(15deg);
+}
+
